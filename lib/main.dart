@@ -24,9 +24,10 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     futureWeather = fetchWeather();
   }
+
   @override
   Widget build(BuildContext context) {
-        return MaterialApp(
+    return MaterialApp(
       title: '服装と洗濯指数',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
