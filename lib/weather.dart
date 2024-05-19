@@ -11,9 +11,10 @@ class Weather {
       required this.city_name});
 
   factory Weather.fromJson(Map<String, dynamic> json) {
-    var temp_min = json['main']['temp_min'];
-    var temp_max = json['main']['temp_max'];
-    var city_name = json['name'];
+    // https://openweathermap.org/forecast5#fields_JSON
+    var temp_min = json['list'][0]['main']['temp_min'];
+    var temp_max = json['list'][0]['main']['temp_max'];
+    var city_name = json['city']['name'];
 
     return Weather(
         temp_min: temp_min, temp_max: temp_max, city_name: city_name);

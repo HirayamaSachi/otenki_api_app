@@ -40,8 +40,9 @@ class _MyAppState extends State<MyApp> {
           child: FutureBuilder<Weather>(
             future: futureWeather,
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data!.city_name);
+              if (snapshot.connectionState == ConnectionState.done &&
+                  snapshot.hasData) {
+                return Text(snapshot.data!.city_name + snapshot.data!.temp_max.toString()+ snapshot.data!.temp_min.toString());
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
