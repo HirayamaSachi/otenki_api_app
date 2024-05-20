@@ -23,14 +23,15 @@ class WeatherList {
         };
       }
       if(three_hour_forcast['rain'] != null){
-        json_lists[date]!['rain']!.add(three_hour_forcast['rain']['3h']);
+        json_lists[date]!['rain']!.add(three_hour_forcast['rain']['3h'].toDouble());
       }else{
-        json_lists[date]!['rain']!.add(0);
+        json_lists[date]!['rain']!.add(0.0);
       }
-      json_lists[date]!['pop']!.add(three_hour_forcast['pop']);
-      json_lists[date]!['temp_min']!.add(three_hour_forcast['temp_min']);
-      json_lists[date]!['temp_max']!.add(three_hour_forcast['temp_max']);
+      json_lists[date]!['pop']!.add(three_hour_forcast['pop'].toDouble());
+      json_lists[date]!['temp_min']!.add(three_hour_forcast['main']['temp_min'].toDouble());
+      json_lists[date]!['temp_max']!.add(three_hour_forcast['main']['temp_max'].toDouble());
     }
+
 
   List<Weather> weather_lists = [];
   json_lists.forEach((date, value) {

@@ -50,11 +50,11 @@ class _MyAppState extends State<MyApp> {
                     children: <Widget>[
                       Container(
                         width: 160,
-                        child: Text(snapshot.data!.weather_list[0].temp_min.toString()),
+                        child: Text(snapshot.data!.weather_list[0].temp_min.toDouble().toString()),
                       ),
                       Container(
                         width: 160,
-                        child: Text(snapshot.data!.weather_list[0].temp_max.toString()),
+                        child: Text(snapshot.data!.weather_list[0].temp_max.toInt().toString()),
                       ),
                     ],
                   ),
