@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 
 import 'fech.dart';
-import 'weather.dart';
+import 'weather_list.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +19,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late Future<Weather> futureWeather;
+  late Future<WeatherList> futureWeather;
   @override
   void initState() {
     futureWeather = fetchWeather();
@@ -37,12 +37,28 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Fetch Data Example'),
         ),
         body: Center(
-          child: FutureBuilder<Weather>(
+          child: FutureBuilder<WeatherList>(
             future: futureWeather,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done &&
                   snapshot.hasData) {
-                return Text(snapshot.data!.city_name + snapshot.data!.temp_max.toString()+ snapshot.data!.temp_min.toString());
+                return Container(
+                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  height: 200,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: <Widget>[
+                      Container(
+                        width: 160,
+                        child: Text(snapshot.data!.weather_list[0].temp_min.toString()),
+                      ),
+                      Container(
+                        width: 160,
+                        child: Text(snapshot.data!.weather_list[0].temp_max.toString()),
+                      ),
+                    ],
+                  ),
+                );
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
