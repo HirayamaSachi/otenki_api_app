@@ -52,19 +52,21 @@ class _MyAppState extends State<MyApp> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: <Widget>[
-                      const Icon(Icons.local_laundry_service_sharp),
+                      Text('最高気温:${snapshot.data!.weather_list[0].temp_max}'),
+                      Text('最低気温:${snapshot.data!.weather_list[0].temp_min}'),
+                      (laundry.washable)
+                          ? const Icon(Icons.circle_outlined)
+                          : const Icon(Icons.clear_sharp),
                       Container(
-                        width: 160,
-                        child: (laundry.washable) ? const Icon(Icons.circle_outlined) : const Icon(Icons.clear_sharp)
-                      ),
+                          width: 30,
+                          child: Image(
+                              image: AssetImage(
+                                  'assets/images/${clothing.min_temp_image_path}'))),
                       Container(
-                        width: 160,
-                        child: Image(image: AssetImage('assets/images/${clothing.min_temp_image_path}'))
-                      ),
-                      Container(
-                        width: 160,
-                        child: Image(image: AssetImage('assets/images/${clothing.max_temp_image_path}'))
-                      ),
+                          width: 30,
+                          child: Image(
+                              image: AssetImage(
+                                  'assets/images/${clothing.max_temp_image_path}'))),
                     ],
                   ),
                 );

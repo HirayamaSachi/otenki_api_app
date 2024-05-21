@@ -12,7 +12,9 @@ Future<WeatherList> fetchWeather() async {
       "?&appid=" +
       FlutterConfig.get('API_KEY') +
       "&q=" +
-      city_name));
+      city_name + 
+      "&units=metric"
+      ));
 
   if (response.statusCode == 200) {
     return WeatherList.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
