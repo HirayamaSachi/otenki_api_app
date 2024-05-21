@@ -4,6 +4,8 @@ import 'package:flutter_config/flutter_config.dart';
 
 import 'fech.dart';
 import 'weather_list.dart';
+import 'laundry.dart';
+import 'clothing.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,19 +44,26 @@ class _MyAppState extends State<MyApp> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done &&
                   snapshot.hasData) {
+                var laundry = Laundry.washable(snapshot.data!.weather_list[0]);
+                var clothing = Clothing.factory(snapshot.data!.weather_list[0]);
                 return Container(
                   margin: const EdgeInsets.symmetric(vertical: 20),
                   height: 200,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: <Widget>[
+                      const Icon(Icons.local_laundry_service_sharp),
                       Container(
                         width: 160,
-                        child: Text(snapshot.data!.weather_list[0].temp_min.toDouble().toString()),
+                        child: (laundry.washable) ? const Icon(Icons.circle_outlined) : const Icon(Icons.clear_sharp)
                       ),
                       Container(
                         width: 160,
-                        child: Text(snapshot.data!.weather_list[0].temp_max.toInt().toString()),
+                        child: Image(image: AssetImage('assets/images/${clothing.min_temp_image_path}'))
+                      ),
+                      Container(
+                        width: 160,
+                        child: Image(image: AssetImage('assets/images/${clothing.max_temp_image_path}'))
                       ),
                     ],
                   ),

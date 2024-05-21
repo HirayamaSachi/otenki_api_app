@@ -40,7 +40,6 @@ class WeatherList {
     var rain = value['rain']!.reduce(max);
     var pop = value['pop']!.reduce((a, b) => a + b);
     weather_lists.add(Weather(date: date, temp_min: temp_min, temp_max: temp_max, rain: rain, pop: (pop > 0)? false : true));
-    Weather(date: date, temp_min: temp_min, temp_max: temp_max, rain: rain, pop: (pop > 0) ? true : false);
   });
 
     return WeatherList(weather_list: weather_lists);
