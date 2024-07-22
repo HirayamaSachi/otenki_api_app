@@ -24,9 +24,74 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late Future<WeatherList> futureWeather;
+  int _selectedIndex = 0;
+  List<Widget> _widgetOptions = [];
   @override
   void initState() {
     futureWeather = fetchWeather();
+    _widgetOptions = [
+      Padding(
+        padding: const EdgeInsets.all(50),
+        child: FutureBuilder<WeatherList>(
+          future: futureWeather,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.hasData) {
+              List<ListItem> items = List<ListItem>.generate(
+                  5,
+                  (int i) => i == 0
+                      ? TodayOutfitPanel(snapshot.data!.weather_list[i])
+                      : NextDayOutfitPanel(snapshot.data!.weather_list[i]));
+              return ListView.builder(
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    return ListTile(
+                      title: item.buildPanel(context),
+                    );
+                  });
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+
+            // By default, show a loading spinner.
+            return const CircularProgressIndicator();
+          },
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.all(50),
+        child: FutureBuilder<WeatherList>(
+          future: futureWeather,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.hasData) {
+              List<ListItem> items = List<ListItem>.generate(
+                  5, (int i) => LaundryPanel(snapshot.data!.weather_list[i]));
+              return ListView.builder(
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    return ListTile(
+                      title: item.buildPanel(context),
+                    );
+                  });
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+
+            // By default, show a loading spinner.
+            return const CircularProgressIndicator();
+          },
+        ),
+      ),
+    ];
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
@@ -38,36 +103,18 @@ class _MyAppState extends State<MyApp> {
       ),
       darkTheme: ThemeData.dark(),
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('服装と洗濯指数'),
-        ),
         body: Center(
-          child: FutureBuilder<WeatherList>(
-            future: futureWeather,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done &&
-                  snapshot.hasData) {
-                List<ListItem> items = List<ListItem>.generate(
-                    5,
-                    (int i) => i == 0
-                        ? TodayPanel(snapshot.data!.weather_list[i])
-                        : SubPanel(snapshot.data!.weather_list[i]));
-                return ListView.builder(
-                    itemCount: items.length,
-                    itemBuilder: (context, index) {
-                      final item = items[index];
-                      return ListTile(
-                        title: item.buildPanel(context),
-                      );
-                    });
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
-          ),
+            child: Container(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        )),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(icon: Icon(Icons.accessibility_new), label: 'outfit'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.bubble_chart_outlined), label: 'washable'),
+          ],
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
         ),
       ),
     );

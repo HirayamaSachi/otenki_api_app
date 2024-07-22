@@ -7,62 +7,57 @@ abstract class ListItem {
   Widget buildPanel(BuildContext context);
 }
 
-class TodayPanel implements ListItem {
-  final Weather today_weather;
+class TodayOutfitPanel implements ListItem {
+  final Weather todayWeather;
 
-  TodayPanel(this.today_weather);
+  TodayOutfitPanel(this.todayWeather);
 
   @override
   Widget buildPanel(BuildContext context) {
-    var laundry = Laundry.washable(today_weather);
-    var clothing = Clothing.factory(today_weather);
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-                width: 100,
-                child: Image(
-                    image: AssetImage(
-                        'assets/images/${clothing.min_temp_image_path}'))),
-            Container(
-                width: 50,
-                child: Image(
-                    image: AssetImage(
-                        'assets/images/${clothing.max_temp_image_path}'))),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            (laundry.washable)
-                ? Icon(Icons.circle_outlined)
-                : Icon(Icons.clear_sharp),
-            Text('${today_weather.temp_max}'),
-            Text('~'),
-            Text('${today_weather.temp_min}'),
-          ],
-        ),
-      ],
+    var clothing = Clothing.factory(todayWeather);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 30),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                  width: 100,
+                  child: Image(
+                      image: AssetImage(
+                          'assets/images/${clothing.min_temp_image_path}'))),
+              Container(
+                  width: 50,
+                  child: Image(
+                      image: AssetImage(
+                          'assets/images/${clothing.max_temp_image_path}'))),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('${todayWeather.temp_max}'),
+              Text('~'),
+              Text('${todayWeather.temp_min}'),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
 
-class SubPanel implements ListItem {
-  final Weather sub_weather;
+class NextDayOutfitPanel implements ListItem {
+  final Weather nextDayWeather;
 
-  SubPanel(this.sub_weather);
+  NextDayOutfitPanel(this.nextDayWeather);
 
   @override
   Widget buildPanel(BuildContext context) {
-    var laundry = Laundry.washable(sub_weather);
-    var clothing = Clothing.factory(sub_weather);
+    var clothing = Clothing.factory(nextDayWeather);
     return Row(
       children: [
-        (laundry.washable)
-            ? Icon(Icons.circle_outlined)
-            : Icon(Icons.clear_sharp),
         Container(
             width: 100,
             child: Image(
@@ -73,9 +68,29 @@ class SubPanel implements ListItem {
             child: Image(
                 image: AssetImage(
                     'assets/images/${clothing.max_temp_image_path}'))),
-        Text('${sub_weather.temp_max}'),
+        Text('${nextDayWeather.temp_max}'),
         Text('~'),
-        Text('${sub_weather.temp_min}'),
+        Text('${nextDayWeather.temp_min}'),
+      ],
+    );
+  }
+}
+
+class LaundryPanel implements ListItem {
+  final Weather weather;
+  LaundryPanel(this.weather);
+
+  @override
+  Widget buildPanel(BuildContext context) {
+    var laundry = Laundry.washable(weather);
+    return Row(
+      children: [
+        (laundry.washable)
+            ? Icon(Icons.circle_outlined)
+            : Icon(Icons.clear_sharp),
+        Text('${weather.temp_max}'),
+        Text('~'),
+        Text('${weather.temp_min}'),
       ],
     );
   }
