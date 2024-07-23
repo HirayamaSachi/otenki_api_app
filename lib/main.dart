@@ -85,6 +85,10 @@ class _MyAppState extends State<MyApp> {
           },
         ),
       ),
+      Padding(
+        padding: EdgeInsets.all(50),
+        child: Text('temp'),
+      ),
     ];
   }
 
@@ -112,6 +116,7 @@ class _MyAppState extends State<MyApp> {
             BottomNavigationBarItem(icon: Icon(Icons.accessibility_new), label: 'outfit'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.bubble_chart_outlined), label: 'washable'),
+                BottomNavigationBarItem(icon: Icon(Icons.search), label: 'search'),
           ],
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
