@@ -37,6 +37,7 @@ dependencies:
   http: ^0.13.5
   flutter_config: ^2.0.2
   intl: ^0.18.1
+  csv: ^6.0.0
 
 dev_dependencies:
   flutter_test:
