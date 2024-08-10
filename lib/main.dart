@@ -8,6 +8,7 @@ import 'fech.dart';
 import 'weather_list.dart';
 import 'laundry.dart';
 import 'clothing.dart';
+import 'search_bar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -87,7 +88,7 @@ class _MyAppState extends State<MyApp> {
       ),
       Padding(
         padding: EdgeInsets.all(50),
-        child: Text('temp'),
+        child: SearchBarApp(),
       ),
     ];
   }
