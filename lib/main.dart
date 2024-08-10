@@ -86,10 +86,7 @@ class _MyAppState extends State<MyApp> {
           },
         ),
       ),
-      Padding(
-        padding: EdgeInsets.all(50),
-        child: SearchBarApp(),
-      ),
+      Padding(padding: EdgeInsets.all(1), child: SearchBarApp(),)
     ];
   }
 
