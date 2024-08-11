@@ -24,22 +24,18 @@ class _SearchBarAppState extends State<SearchBarApp> {
             },
             icon: const Icon(Icons.search));
       },
-      viewOnSubmitted: (value) async{
-        if(value == '') {
-          return;
+      suggestionsBuilder: (context, controller) async{
+        if(controller.text == '') {
+          return _lastOptions;
         }
-        _addresses = await _SearchAddressAPI.search(value);
-        setState((){
-          _addresses = _addresses;
-        });
+        _addresses = await _SearchAddressAPI.search(controller.text);
+
         _lastOptions = List.generate(_addresses.length, (index) {
           String _address_name = _addresses.elementAt(index).address;
           return ListTile(
             title: Text('$_address_name'),
           );
         });
-      },
-      suggestionsBuilder: (context, controller){
         return _lastOptions;
       },
     );
@@ -49,10 +45,9 @@ class _SearchBarAppState extends State<SearchBarApp> {
 class _SearchAddressAPI {
   static Future search(String query)
   async {
-    // await Future<void>.delayed(Duration(seconds: 10));
     RegExp exp = RegExp(caseSensitive: false, r"^[ぁ-んァ-ヶｱ-ﾝﾞﾟ一-龠]*$");
-    if(query == '' || !exp.hasMatch(query)) {
-      return '';
+    if(query.length < 4 || query == '' || !exp.hasMatch(query)) {
+      return List<Address>.empty();
     }
     final response = await fetchAddress(query);
     final xml = XmlDocument.parse(response.body);
