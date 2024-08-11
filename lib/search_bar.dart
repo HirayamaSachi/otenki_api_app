@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:otenki_api_app/fech.dart';
+import 'package:otenki_api_app/address.dart';
+import 'package:xml/xml.dart';
 
 class SearchBarApp extends StatefulWidget {
   const SearchBarApp({super.key});
@@ -9,11 +11,11 @@ class SearchBarApp extends StatefulWidget {
 
 class _SearchBarAppState extends State<SearchBarApp> {
   final SearchController controller = SearchController();
-  String? _searchingWithQuery;
+  List<Address> _addresses = List<Address>.empty();
   late Iterable<Widget> _lastOptions = <Widget>[];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return SearchAnchor(
       builder: (context, controller) {
         return IconButton(
@@ -22,18 +24,22 @@ class _SearchBarAppState extends State<SearchBarApp> {
             },
             icon: const Icon(Icons.search));
       },
-      suggestionsBuilder: (context, controller) async {
-        _searchingWithQuery = controller.text;
-        await _SearchAddressAPI.search(_searchingWithQuery!);
-        if(_searchingWithQuery != controller.text) {
-          return _lastOptions;
+      viewOnSubmitted: (value) async{
+        if(value == '') {
+          return;
         }
-
-        _lastOptions = List.generate(5, (index) {
+        _addresses = await _SearchAddressAPI.search(value);
+        setState((){
+          _addresses = _addresses;
+        });
+        _lastOptions = List.generate(_addresses.length, (index) {
+          String _address_name = _addresses.elementAt(index).address;
           return ListTile(
-            title: Text('$index'),
+            title: Text('$_address_name'),
           );
         });
+      },
+      suggestionsBuilder: (context, controller){
         return _lastOptions;
       },
     );
@@ -48,7 +54,16 @@ class _SearchAddressAPI {
     if(query == '' || !exp.hasMatch(query)) {
       return '';
     }
-    print(query);
-    // fetchAddress(query);
+    final response = await fetchAddress(query);
+    final xml = XmlDocument.parse(response.body);
+    final address = xml.findAllElements('address').map((element) => element.innerText);
+    final lon = xml.findAllElements('longitude').map((element) => element.innerText);
+    final lat = xml.findAllElements('latitude').map((element) => element.innerText);
+
+    final List<Address> addresses = [];
+    for (var i = 0; i < address.length; i++) {
+      addresses.add(Address(address: address.elementAt(i), lon: double.parse(lon.elementAt(i)), lat: double.parse(lat.elementAt(i))));
+    }
+    return addresses;
   }
 }
