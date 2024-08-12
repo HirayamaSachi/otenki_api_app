@@ -6,8 +6,6 @@ import 'package:otenki_api_app/list_panel.dart';
 
 import 'fech.dart';
 import 'weather_list.dart';
-import 'laundry.dart';
-import 'clothing.dart';
 import 'search_bar.dart';
 
 void main() async {
